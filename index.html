@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HarvestGuard AI - Premium Diagnostics</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --dark-green: #27ae60;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.92);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --highlight-gold: #f1c40f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        .parallax-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            opacity: 0.12;
+            z-index: -1;
+            animation: bgZoom 20s infinite alternate;
+        }
+
+        @keyframes bgZoom {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .upper-nav {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 0 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 65px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .logo { font-weight: 700; color: var(--dark-green); font-size: 1.5rem; text-decoration: none; display: flex; align-items: center; gap: 10px; transition: 0.3s; }
+        .logo:hover { transform: scale(1.05); }
+
+        .nav-tabs { display: flex; align-items: center; }
+        .nav-tabs a {
+            text-decoration: none;
+            color: var(--text-dark);
+            margin-left: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .nav-tabs a:hover { color: var(--dark-green); }
+
+        .main-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: minmax(400px, 750px) 260px; 
+            gap: 40px;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            align-items: start;
+            justify-content: center;
+        }
+
+        .card-main {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border: 1px solid var(--glass-border);
+            animation: slideUp 0.8s ease-out;
+            margin-bottom: 30px;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .upload-zone {
+            border: 3px dashed var(--primary-green);
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
+            height: 320px; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin: 25px 0;
+            overflow: hidden;
+        }
+
+        .upload-zone:hover { background: #f0fdf4; transform: scale(1.02); border-color: var(--dark-green); }
+
+        .btn-action {
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            color: white; width: 100%; padding: 18px; border: none; border-radius: 15px;
+            font-weight: 700; font-size: 1.15rem; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3); transition: 0.3s;
+        }
+        .btn-action:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(39, 174, 96, 0.4); }
+
+        .analytics-dashboard {
+            margin-top: 30px;
+            display: none;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.9); }
+            70% { transform: scale(1.05); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .highlight-card {
+            background: linear-gradient(135deg, #fff 0%, #f9f9f9 100%);
+            padding: 25px;
+            border-radius: 20px;
+            border-left: 8px solid var(--highlight-gold);
+            box-shadow: 0 8px 25px rgba(241, 196, 15, 0.15);
+            margin-bottom: 20px;
+            text-align: center;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { box-shadow: 0 8px 25px rgba(241, 196, 15, 0.15); }
+            to { box-shadow: 0 8px 35px rgba(241, 196, 15, 0.35); }
+        }
+
+        .disease-label { font-size: 0.85rem; font-weight: 700; color: #b59410; text-transform: uppercase; letter-spacing: 2px; }
+        .disease-result { font-size: 1.8rem; font-weight: 800; color: var(--text-dark); margin-top: 5px; display: block; }
+
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .stat-item { background: white; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #f1f5f9; }
+        .stat-item span { font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; display: block; }
+        .stat-item strong { color: var(--dark-green); font-size: 1rem; display: block; margin-top: 4px; }
+
+        .action-box {
+            background: #fffbeb; padding: 20px; border-radius: 20px; margin-top: 20px;
+            border: 1px dashed #f59e0b; color: #92400e; font-size: 0.9rem;
+        }
+
+        .card-side {
+            background: var(--glass-bg); padding: 25px; border-radius: 25px;
+            border: 1px solid var(--glass-border); box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            animation: fadeInRight 1s ease;
+        }
+
+        @keyframes fadeInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .mini-crop { display: flex; align-items: center; gap: 12px; padding: 10px; background: white; border-radius: 10px; margin-bottom: 10px; transition: 0.3s; font-size: 0.9rem; font-weight: 500;}
+        .mini-crop:hover { transform: translateX(10px); color: var(--dark-green); }
+
+        #commentList { margin-bottom: 25px; max-height: 400px; overflow-y: auto; padding-right: 10px; }
+        .comment-item { background: white; padding: 18px; border-radius: 20px; margin-bottom: 15px; border: 1px solid #f1f5f9; box-shadow: 0 5px 15px rgba(0,0,0,0.02); }
+        .comment-item strong { color: var(--dark-green); font-size: 1rem; display: block; margin-bottom: 5px; }
+        
+        .login-prompt { background: #fef3c7; border: 1px dashed #d97706; padding: 20px; border-radius: 15px; text-align: center; }
+
+        footer { background: var(--glass-bg); padding: 20px; text-align: center; font-size: 0.85rem; color: var(--text-light); margin-top: auto; }
+    </style>
+</head>
+<body>
+    <div class="parallax-bg"></div>
+
+    <nav class="upper-nav">
+        <a href="/" class="logo"><i class="fas fa-leaf"></i> HarvestGuard</a>
+        <div class="nav-tabs">
+            <a href="/">Home</a>
+            <a href="/analysis-guide.html">Analysis Guide</a>
+            <a href="/about.html">About</a>
+            <a href="/contact.html">AI Contact</a>
+            
+            {% if current_user %}
+                <span style="font-weight:600; color:var(--dark-green); margin-left:20px;"><i class="fas fa-user-circle"></i> {{ current_user }}</span>
+                <a href="/logout" style="color:#e74c3c;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            {% else %}
+                <a href="/login.html" class="btn-action" style="padding: 8px 15px; font-size: 0.8rem; margin-left: 15px; width: auto;">Sign In</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <div class="main-content">
+            <main class="card-main">
+                <h1>Analyze Leaf Image</h1>
+                <p style="color: var(--text-light); margin-bottom: 10px;">Empowering farmers with AI-driven plant health diagnostics.</p>
+                
+                <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                    <div id="prompt" style="text-align: center;">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3.5rem; color: var(--primary-green); opacity: 0.6; margin-bottom: 15px;"></i>
+                        <p style="color: var(--text-light); font-weight: 600;">Drag & Drop or Click to Upload</p>
+                    </div>
+                    <img id="imagePreview" style="max-width: 95%; max-height: 95%; display: none; border-radius: 12px; object-fit: contain;">
+                    <input type="file" id="fileInput" name="file" style="display:none" onchange="previewImage(this)">
+                </div>
+
+                <button type="button" class="btn-action" onclick="diagnoseNow()">Start AI Diagnosis</button>
+
+                <div id="dashboard" class="analytics-dashboard">
+                    <div class="highlight-card">
+                        <span class="disease-label">🧬 Detected Disease</span>
+                        <strong id="diseaseName" class="disease-result">-</strong>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item"><span>AI Confidence</span><strong id="confidence">-</strong></div>
+                        <div class="stat-item"><span>Severity Level</span><strong id="severity">-</strong></div>
+                        <div class="stat-item"><span>Spread Risk</span><strong id="spreadRisk">-</strong></div>
+                        <div class="stat-item"><span>Est. Yield Impact</span><strong id="yieldImpact">-</strong></div>
+                    </div>
+
+                    <div class="action-box">
+                        <h4 style="margin-bottom: 5px;"><i class="fas fa-info-circle"></i> Recommended Action:</h4>
+                        <p id="actionPlan">Please upload a leaf for analysis.</p>
+                    </div>
+                </div>
+            </main>
+
+            <section class="card-main">
+                <h2><i class="fas fa-comments"></i> Farmer Discussion</h2>
+                <div id="commentList">
+                    {% if comments %}
+                        {% for comment in comments %}
+                            <div class="comment-item">
+                                <strong><i class="fas fa-user-circle"></i> {{ comment.name }}</strong>
+                                <p>{{ comment.text }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="text-align: center; color: var(--text-light); padding: 20px;">No discussions yet. Be the first to start!</p>
+                    {% endif %}
+                </div>
+
+                {% if current_user %}
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <textarea id="userComment" placeholder="💬 Share your farming tips or ask a question..." 
+                              style="padding: 14px; border-radius: 15px; border: 1px solid var(--glass-border); background: rgba(255,255,255,0.7); outline: none; min-height: 100px; font-size: 0.95rem; resize: vertical;"></textarea>
+                    <button class="btn-action" onclick="postComment()" style="padding: 14px;"><i class="fas fa-paper-plane"></i> Post Comment</button>
+                </div>
+                {% else %}
+                <div class="login-prompt">
+                    <p style="color: #92400e; font-weight: 600;">Want to join the discussion?</p>
+                    <a href="/login.html" style="color: var(--dark-green); font-weight: 700; text-decoration: underline;">Sign in to post comments</a>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+
+        <aside class="card-side">
+            <div style="font-size: 0.75rem; font-weight: 700; color: var(--dark-green); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; text-align: center;">Library</div>
+            <div class="mini-crop"><span>🍅</span> Tomato Blight</div>
+            <div class="mini-crop"><span>🥔</span> Potato Blight</div>
+            <div class="mini-crop"><span>🌽</span> Corn Blight</div>
+            <div class="mini-crop"><span>🍓</span> Strawberry Scorch</div>
+            <div class="mini-crop"><span>🍆</span> Brinjal Phomopsis</div>
+        </aside>
+    </div>
+
+    <footer><p>&copy; 2026 HarvestGuard AI &bull; Smart Farming Solution</p></footer>
+
+    <script>
+        const diseaseDB = {
+            "Tomato - Early Blight": { severity: "Moderate", spread: "Medium", yield: "20–30% loss", action: "Remove infected leaves, apply copper fungicide." },
+            "Potato - Late Blight": { severity: "High", spread: "Very High", yield: "Up to 70% loss", action: "Immediate fungicide spraying, destroy infected plants." },
+            "Corn - Northern Leaf Blight": { severity: "Moderate to High", spread: "Medium", yield: "15–40% loss", action: "Use resistant hybrids, crop rotation." },
+            "Strawberry - Leaf Scorch": { severity: "Low to Moderate", spread: "Medium", yield: "10–20% loss", action: "Remove old leaves, improve sunlight exposure." },
+            "Brinjal - Phomopsis Blight": { severity: "High", spread: "High", yield: "30–50% loss", action: "Use disease-free seeds, remove affected fruits." },
+            "Healthy": { severity: "None", spread: "Low", yield: "0%", action: "Maintain standard care and monitoring." }
+        };
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('imagePreview').src = e.target.result;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('prompt').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'none';
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function diagnoseNow() {
+            const fileInput = document.getElementById('fileInput');
+            if (!fileInput.files[0]) { alert("Please select an image!"); return; }
+            const btn = document.querySelector('.btn-action');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            try {
+                const response = await fetch('/predict', { method: 'POST', body: formData });
+                const data = await response.json();
+                document.getElementById('dashboard').style.display = 'block';
+                const diseaseName = data.prediction;
+                document.getElementById('diseaseName').innerText = diseaseName;
+                document.getElementById('confidence').innerText = data.confidence;
+                const info = diseaseDB[diseaseName] || { severity: "Unknown", spread: "N/A", yield: "N/A", action: "Consult an expert." };
+                document.getElementById('severity').innerText = info.severity;
+                document.getElementById('spreadRisk').innerText = info.spread;
+                document.getElementById('yieldImpact').innerText = info.yield;
+                document.getElementById('actionPlan').innerText = info.action;
+            } catch (e) { alert("Error connecting to AI server."); }
+            finally { btn.innerText = "Start AI Diagnosis"; }
+        }
+
+        async function postComment() {
+            const text = document.getElementById('userComment').value;
+            if(!text) return alert("Please type a comment.");
+            
+            // This pulls the username from the Flask session safely into JS
+            const currentUser = "{{ current_user }}"; 
+
+            const response = await fetch('/add_comment', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ name: currentUser, text: text })
+            });
+            
+            if(response.ok) {
+                location.reload(); 
+            } else {
+                alert("Failed to post comment. Please ensure you are logged in.");
+            }
+        }
+    </script>
+</body>
+</html>
